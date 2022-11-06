@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 /// A paddle
@@ -14,7 +15,7 @@ public class Paddle : MonoBehaviour
 	Vector2 paddleVector;
 	float halfColliderHeight;
 	const float BounceAngleHalfRange = 60 * Mathf.Deg2Rad;
-
+	HitsAddedEvent hitsAddedEvent = new HitsAddedEvent();
     /// <summary>
     /// Start is called before the first frame update
     /// </summary>
@@ -22,6 +23,7 @@ public class Paddle : MonoBehaviour
 	{
 		paddleBody = GetComponent<Rigidbody2D>();
 		halfColliderHeight = GetComponent<BoxCollider2D>().size.y / 2;
+		EventManager.AddHitsAddedInvoker(this);
     }
 	/// <summary>
 	/// Controls the movement for the right and left paddle
@@ -86,7 +88,7 @@ public class Paddle : MonoBehaviour
 	{
 		if (coll.gameObject.CompareTag("Ball") && CheckFront(coll))
 		{
-			HUD.AddHits(this.ss, Ball.Hits);
+			hitsAddedEvent.Invoke(this.ss, coll.gameObject.GetComponent<Ball>().Hits);
 			// calculate new ball direction
 			float ballOffsetFromPaddleCenter =
 				coll.transform.position.y - transform.position.y;
@@ -109,7 +111,21 @@ public class Paddle : MonoBehaviour
 			// tell ball to set direction to new direction
 			Ball ballScript = coll.gameObject.GetComponent<Ball>();
 			ballScript.SetDirection(direction);
-		}
+        }
 	}
-
+	/// <summary>
+	/// Freezes opponents paddle
+	/// </summary>
+	/// <exception cref="System.NotImplementedException"></exception>
+	public void Freeze(float duration)
+	{
+		throw new System.NotImplementedException();
+	}
+    /// <summary>
+    /// adds a listener
+    /// </summary>
+    public void AddHitsAddedListener(UnityAction<ScreenSide, float> listener)
+    {
+        hitsAddedEvent.AddListener(listener);
+    }
 }

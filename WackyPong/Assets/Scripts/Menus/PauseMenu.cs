@@ -21,4 +21,20 @@ public class PauseMenu : MonoBehaviour
     {
         
     }
+    /// <summary>
+    /// Quits the game
+    /// </summary>
+    /// <exception cref="System.NotImplementedException"></exception>
+    public void QuitGame()
+    {
+        throw new System.NotImplementedException();
+    }
+    /// <summary>
+    /// Resynes the game
+    /// </summary>
+    /// <exception cref="System.NotImplementedException"></exception>
+    public void ResumeGame()
+    {
+        throw new System.NotImplementedException();
+    }
 }

@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
-/// A help menu
+/// a gamer over message
 /// </summary>
-public class HelpMenu : MonoBehaviour
+public class GameOverMessage : MonoBehaviour
 {
     /// <summary>
     /// Start is called before the first frame update
@@ -13,7 +13,6 @@ public class HelpMenu : MonoBehaviour
     {
         
     }
-
     /// <summary>
     /// Update is called once per frame
     /// </summary>
@@ -22,10 +21,10 @@ public class HelpMenu : MonoBehaviour
         
     }
     /// <summary>
-    /// Displays the main menu
+    /// Displays a message when the game is won
     /// </summary>
     /// <exception cref="System.NotImplementedException"></exception>
-    public void ShowMainMenu()
+    public void DisplayMessage()
     {
         throw new System.NotImplementedException();
     }

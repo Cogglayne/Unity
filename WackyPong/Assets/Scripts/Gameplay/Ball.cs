@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 /// A ball
@@ -14,13 +15,13 @@ public class Ball : MonoBehaviour
 	static float hits = 0;
 	Timer ballDestroyTimer;
     Timer ballMoveTimer;
-	BallSpawner spawner;
     float halfColliderWidth;
-    bool ballShouldBeMoving = false;
+    BallLostEvent ballLostEvent = new BallLostEvent();
+    BallDiedEvent ballDiedEvent = new BallDiedEvent();
     /// <summary>
     /// Returns number of hits
     /// </summary>
-    public static float Hits
+    public float Hits
     {
         get { return hits; }
     }
@@ -29,17 +30,20 @@ public class Ball : MonoBehaviour
     /// </summary>
     void Start()
 	{
-		spawner = Camera.main.GetComponent<BallSpawner>();
         // timer for ball life time
         ballDestroyTimer = gameObject.AddComponent<Timer>();
-		ballDestroyTimer.Duration = ConfigurationUtils.BallLifeTime;
+        ballDestroyTimer.AddTimerFinishedListener(HandleDeathTimerFinished);
+        ballDestroyTimer.Duration = ConfigurationUtils.BallLifeTime;
 		ballDestroyTimer.Run();
         // timer for movement delay
         ballMoveTimer = gameObject.AddComponent<Timer>();
         ballMoveTimer.Duration = 1;
+        ballMoveTimer.AddTimerFinishedListener(HandleMoveTimerFinished);
         ballMoveTimer.Run();
         hits = ConfigurationUtils.StandardBallHit;
         halfColliderWidth = GetComponent<BoxCollider2D>().size.x / 2;
+        EventManager.AddBallLostInvoker(this);
+        EventManager.AddBallDiedInvoker(this);
 	}
     /// <summary>
     /// Gets the ball moving
@@ -65,24 +69,6 @@ public class Ball : MonoBehaviour
         ballBody.AddForce(moveDirection * ConfigurationUtils.BallImpulseForce, ForceMode2D.Impulse);
     }
     /// <summary>
-    ///  Update is called once per frame
-    /// </summary>
-    void Update()
-	{
-        // moves ball after 1 second has passed
-        if (ballMoveTimer.Finished && !ballShouldBeMoving)
-        {
-            ballShouldBeMoving = true; // prevents constantly adding force to the ball
-            StartMovingBall();
-        }
-        // destroys ball and then spawns a new ball
-		if (ballDestroyTimer.Finished)
-		{
-            spawner.SpawnBall();
-            Destroy(this.gameObject);
-        }
-	}
-    /// <summary>
     /// Changes balls direction depending on where it hits the paddle
     /// </summary>
     /// <param name="direction"></param>
@@ -98,11 +84,11 @@ public class Ball : MonoBehaviour
     bool OutsideScreen(float x)
     {
       
-        if (x + halfColliderWidth > ScreenUtils.ScreenRight)
+        if (x - halfColliderWidth > ScreenUtils.ScreenRight)
         {
             return true;
         }
-        if (x - halfColliderWidth < ScreenUtils.ScreenLeft)
+        if (x + halfColliderWidth < ScreenUtils.ScreenLeft)
         {
             return true;
         }
@@ -125,16 +111,63 @@ public class Ball : MonoBehaviour
             {
                 if (this.transform.position.x > 0)
                 {
-                    HUD.AddScore(ScreenSide.Left, hits);
+                    ballLostEvent.Invoke(ScreenSide.Left, hits);
                 }
                 else
                 {
-                    HUD.AddScore(ScreenSide.Right, hits);
+                    ballLostEvent.Invoke(ScreenSide.Right, hits);
                 }
             }
-            spawner.SpawnBall();
-            Destroy(this.gameObject);
+            DestroyBall();
         }
 
+    }
+    /// <summary>
+    /// Speeds up balls in play
+    /// </summary>
+    /// <exception cref="System.NotImplementedException"></exception>
+    public void SpeedUp(float speedupFactor, float duration)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    /// <summary>
+    /// adds a ball lost listener
+    /// </summary>
+    public void AddBallLostListener(UnityAction<ScreenSide, float> listener)
+    {
+        ballLostEvent.AddListener(listener);
+    }
+    /// <summary>
+    /// adds a ball died listener
+    /// </summary>
+    public void AddBallDiedListener(UnityAction listener)
+    {
+        ballDiedEvent.AddListener(listener);
+    }
+
+    /// <summary>
+    /// stops the timer and starts the ball
+    /// </summary>
+    void HandleMoveTimerFinished()
+    {
+        StartMovingBall();
+    }
+    /// <summary>
+    /// destroys a ball
+    /// </summary>
+    void DestroyBall()
+    {
+        EventManager.RemoveBallDiedInvoker(this);
+        EventManager.RemoveBallLostInvoker(this);
+        Destroy(this.gameObject);
+    }
+    /// <summary>
+    /// destroys the ball when the timer finishes
+    /// </summary>
+    void HandleDeathTimerFinished()
+    {
+        ballDiedEvent.Invoke();
+        DestroyBall();
     }
 }

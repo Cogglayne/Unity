@@ -21,4 +21,36 @@ public class MainMenu : MonoBehaviour
     {
         
     }
+    /// <summary>
+    /// Displays the help menu
+    /// </summary>
+    /// <exception cref="System.NotImplementedException"></exception>
+    public void ShowHelpMenu()
+    {
+        throw new System.NotImplementedException();
+    }
+    /// <summary>
+    /// Starts a two player game
+    /// </summary>
+    /// <exception cref="System.NotImplementedException"></exception>
+    public void StartTwoPlayerGame()
+    {
+        throw new System.NotImplementedException();
+    }
+    /// <summary>
+    /// Displays the difficulty menu
+    /// </summary>
+    /// <exception cref="System.NotImplementedException"></exception>
+    public void ShowDifficultyMenu()
+    {
+        throw new System.NotImplementedException();
+    }
+    /// <summary>
+    /// Exits the game
+    /// </summary>
+    /// <exception cref="System.NotImplementedException"></exception>
+    public void ExitGame()
+    {
+        throw new System.NotImplementedException();
+    }
 }

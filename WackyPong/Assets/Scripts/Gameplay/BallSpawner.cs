@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
-
 /// <summary>
 /// A ball spawner
 /// </summary>
@@ -34,45 +33,60 @@ public class BallSpawner : MonoBehaviour
         Destroy(tempBall);
 
         ballSpawnTimer = gameObject.AddComponent<Timer>();
+        ballSpawnTimer.AddTimerFinishedListener(HandleSpawnTimerFinished);
         ballSpawnTimer.Duration = Random.Range(ConfigurationUtils.MinSpawn, ConfigurationUtils.MaxSpawn);
         ballSpawnTimer.Run();
+
+        EventManager.AddBallDiedListener(SpawnBall);
+        EventManager.AddBallLostListener(SpawnBall);
     }
+    /// <summary>
+    /// Checks if a ball will have a collision if it is spawned
+    /// </summary>
+    /// <param name="arg0"></param>
+    /// <param name="arg1"></param>
+    void SpawnBall(ScreenSide ss, float hits)
+    {
+        SpawnBall();
+    }
+
     /// <summary>
     ///  Checks if a ball will have a collision if it is spawned
     /// </summary>
-    public void SpawnBall()
+    void SpawnBall()
     {
         // make sure ball does not spawn into a collision
         if (Physics2D.OverlapArea(spawnLocationMin, spawnLocationMax) == null)
         {
             retrySpawn = false;
+            Instantiate(prefabBall, Vector3.zero, Quaternion.identity);
         }
         else
         {
             retrySpawn = true;
         }
     }
+
+    /// <summary>
+    /// spawns a ball when the timer finishes
+    /// </summary>
+    void HandleSpawnTimerFinished()
+    {
+        // don't stack with a spawn still pending
+        retrySpawn = false;
+        SpawnBall();
+        ballSpawnTimer.Duration = Random.Range(ConfigurationUtils.MinSpawn, ConfigurationUtils.MaxSpawn);
+        ballSpawnTimer.Run();
+    }
     /// <summary>
     /// Update is called once per frame
     /// </summary>
     void Update()
     {
-        // checks if the timer is finished before attempting to spawn a ball
-        if (ballSpawnTimer.Finished)
+        // try again if spawn still pending
+        if (retrySpawn)
         {
-            // retry spawn is set to true so the spawnball method will check if there is a spawn collison as long as the spawn timer is finished
-            retrySpawn = true;
-            if (retrySpawn)
-            {
-                SpawnBall();
-            }
-            // if there is no spawn collision a ball is spawned and the timer is reset
-            if (!retrySpawn)
-            {
-                Instantiate(prefabBall, Vector3.zero, Quaternion.identity);
-                ballSpawnTimer.Duration = Random.Range(ConfigurationUtils.MinSpawn, ConfigurationUtils.MaxSpawn);
-                ballSpawnTimer.Run();
-            }
+            SpawnBall();
         }
     }
 }

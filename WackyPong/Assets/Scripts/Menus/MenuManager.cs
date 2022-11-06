@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
-/// A help menu
+/// A menu manager
 /// </summary>
-public class HelpMenu : MonoBehaviour
+public class MenuManager : MonoBehaviour
 {
     /// <summary>
     /// Start is called before the first frame update
@@ -22,10 +22,11 @@ public class HelpMenu : MonoBehaviour
         
     }
     /// <summary>
-    /// Displays the main menu
+    /// Goes to a menu depending on menu enum
     /// </summary>
+    /// <param name="menu"></param>
     /// <exception cref="System.NotImplementedException"></exception>
-    public void ShowMainMenu()
+    public void GoToMenu(Menu menu)
     {
         throw new System.NotImplementedException();
     }

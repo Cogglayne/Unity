@@ -21,4 +21,28 @@ public class DifficultyMenu : MonoBehaviour
     {
         
     }
+    /// <summary>
+    /// Starts a single player game on easy difficulty
+    /// </summary>
+    /// <exception cref="System.NotImplementedException"></exception>
+    public void StartSinglePlayerEasyGame()
+    {
+        throw new System.NotImplementedException();
+    }
+    /// <summary>
+    /// Starts a single player game on medium difficulty
+    /// </summary>
+    /// <exception cref="System.NotImplementedException"></exception>
+    public void StartSinglePlayerMediumGame()
+    {
+        throw new System.NotImplementedException();
+    }
+    /// <summary>
+    /// Starts a single player game on hard difficulty
+    /// </summary>
+    /// <exception cref="System.NotImplementedException"></exception>
+    public void StartSinglePlayerHardGame()
+    {
+        throw new System.NotImplementedException();
+    }
 }
