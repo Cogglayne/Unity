@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.Events;
 
 /// <summary>
 /// a hud
@@ -18,13 +19,19 @@ public class HUD : MonoBehaviour
     float leftScoreCount = 0;
     float rightCount = 0;
     float rightScoreCount = 0;
+    PlayerWonEvent playerWonEvent = new PlayerWonEvent();
     /// <summary>
     /// Start is called before the first frame update
     /// </summary>
     void Start()
     {
+        leftScoreCount = 0;
+        rightScoreCount = 0;    
+        rightCount = 0;
+        leftCount = 0;
         EventManager.AddBallLostListener(AddPoints);
         EventManager.AddHitsAddedListener(AddHits);
+        EventManager.AddPlayerWonInvoker(this);
     }
     /// <summary>
     /// Adds a hit depending on paddle
@@ -54,21 +61,28 @@ public class HUD : MonoBehaviour
         {
             leftScoreCount += hits;
             score.text = leftScoreCount.ToString() + " - " + rightScoreCount.ToString();
+            if(leftScoreCount >= 5)
+            {
+                playerWonEvent.Invoke(ss);
+            }
         }
         else
         {
             rightScoreCount += hits;
             score.text = leftScoreCount.ToString() + " - " + rightScoreCount.ToString();
+            if (rightScoreCount >= 5)
+            {
+                playerWonEvent.Invoke(ss);
+            }
         }
     }
 
     /// <summary>
-    /// Checks if a player has a winning score
+    /// adds a player won listener
     /// </summary>
-    /// <returns></returns>
-    /// <exception cref="System.NotImplementedException"></exception>
-    public bool CheckScore()
+    /// <param name=""></param>
+    public void AddPlayerWonListener(UnityAction<ScreenSide> listener)
     {
-        throw new System.NotImplementedException();
+        playerWonEvent.AddListener(listener);
     }
 }

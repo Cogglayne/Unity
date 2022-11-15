@@ -1,33 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 /// <summary>
 /// A main menu
 /// </summary>
 public class MainMenu : MonoBehaviour
 {
-    /// <summary>
-    ///  Start is called before the first frame update
-    /// </summary>
-    void Start()
-    {
-        
-    }
 
-    /// <summary>
-    /// Update is called once per frame
-    /// </summary>
-    void Update()
-    {
-        
-    }
     /// <summary>
     /// Displays the help menu
     /// </summary>
     /// <exception cref="System.NotImplementedException"></exception>
     public void ShowHelpMenu()
     {
-        throw new System.NotImplementedException();
+        MenuManager.GoToMenu(Menu.HelpMenu);
     }
     /// <summary>
     /// Starts a two player game
@@ -35,7 +22,7 @@ public class MainMenu : MonoBehaviour
     /// <exception cref="System.NotImplementedException"></exception>
     public void StartTwoPlayerGame()
     {
-        throw new System.NotImplementedException();
+        SceneManager.LoadScene("gameplay");
     }
     /// <summary>
     /// Displays the difficulty menu
@@ -51,6 +38,6 @@ public class MainMenu : MonoBehaviour
     /// <exception cref="System.NotImplementedException"></exception>
     public void ExitGame()
     {
-        throw new System.NotImplementedException();
+        Application.Quit();
     }
 }

@@ -1,33 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 /// <summary>
 /// A menu manager
 /// </summary>
 public class MenuManager : MonoBehaviour
 {
     /// <summary>
-    /// Start is called before the first frame update
-    /// </summary>
-    void Start()
-    {
-        
-    }
-
-    /// <summary>
-    /// Update is called once per frame
-    /// </summary>
-    void Update()
-    {
-        
-    }
-    /// <summary>
     /// Goes to a menu depending on menu enum
     /// </summary>
     /// <param name="menu"></param>
     /// <exception cref="System.NotImplementedException"></exception>
-    public void GoToMenu(Menu menu)
+    public static void GoToMenu(Menu name)
     {
-        throw new System.NotImplementedException();
+        switch (name)
+        {
+            case Menu.DifficultyMenu:
+                break;
+            case Menu.PauseMenu:
+                Object.Instantiate(Resources.Load("PauseMenu"));
+                break;
+            case Menu.MainMenu:
+                SceneManager.LoadScene("mainmenu");
+                break;
+            case Menu.HelpMenu:
+                SceneManager.LoadScene("helpmenu");
+                break;
+        }
     }
 }

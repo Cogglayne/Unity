@@ -13,7 +13,8 @@ public static class EventManager
     static List<UnityAction> ballDiedListeners = new List<UnityAction>();
     static List<Paddle> hitsAddedInvokers = new List<Paddle>();
     static List<UnityAction<ScreenSide, float>> hitsAddedListeners = new List<UnityAction<ScreenSide, float>>();
-  
+    static List<HUD> playerWonInvokers = new List<HUD>();
+    static List<UnityAction<ScreenSide>> playerWonListeners = new List<UnityAction<ScreenSide>>();
 
     /// <summary>
     /// Adds a ball lost invoker
@@ -78,7 +79,7 @@ public static class EventManager
         ballDiedInvokers.Remove(invoker);
     }
     /// <summary>
-    /// Adds a paddle invoker
+    /// Adds a hits added invoker
     /// </summary>
     /// <param name="invoker"></param>
     public static void AddHitsAddedInvoker(Paddle invoker)
@@ -90,7 +91,7 @@ public static class EventManager
         }
     }
     /// <summary>
-    /// Adds a paddle listener
+    /// Adds a hits added listener
     /// </summary>
     /// <param name="handler"></param>
     public static void AddHitsAddedListener(UnityAction<ScreenSide, float> listener)
@@ -99,6 +100,30 @@ public static class EventManager
         foreach (Paddle paddle in hitsAddedInvokers)
         {
             paddle.AddHitsAddedListener(listener);
+        }
+    }
+    /// <summary>
+    /// Adds a play won invoker
+    /// </summary>
+    /// <param name="invoker"></param>
+    public static void AddPlayerWonInvoker(HUD invoker)
+    {
+        playerWonInvokers.Add(invoker);
+        foreach (UnityAction<ScreenSide> listener in playerWonListeners)
+        {
+            invoker.AddPlayerWonListener(listener);
+        }
+    }
+    /// <summary>
+    /// Adds a player won listener
+    /// </summary>
+    /// <param name="handler"></param>
+    public static void AddPlayerWonListener(UnityAction<ScreenSide> listener)
+    {
+        playerWonListeners.Add(listener);
+        foreach (HUD hud in playerWonInvokers)
+        {
+            hud.AddPlayerWonListener(listener);
         }
     }
 }

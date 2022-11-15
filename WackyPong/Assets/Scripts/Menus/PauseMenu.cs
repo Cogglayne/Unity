@@ -11,15 +11,7 @@ public class PauseMenu : MonoBehaviour
     /// </summary>
     void Start()
     {
-        
-    }
-
-    /// <summary>
-    /// Update is called once per frame
-    /// </summary>
-    void Update()
-    {
-        
+        Time.timeScale = 0;
     }
     /// <summary>
     /// Quits the game
@@ -27,7 +19,9 @@ public class PauseMenu : MonoBehaviour
     /// <exception cref="System.NotImplementedException"></exception>
     public void QuitGame()
     {
-        throw new System.NotImplementedException();
+        Time.timeScale = 1;
+        Destroy(gameObject);
+        MenuManager.GoToMenu(Menu.MainMenu);
     }
     /// <summary>
     /// Resynes the game
@@ -35,6 +29,7 @@ public class PauseMenu : MonoBehaviour
     /// <exception cref="System.NotImplementedException"></exception>
     public void ResumeGame()
     {
-        throw new System.NotImplementedException();
+        Time.timeScale = 1;
+        Destroy(gameObject);
     }
 }

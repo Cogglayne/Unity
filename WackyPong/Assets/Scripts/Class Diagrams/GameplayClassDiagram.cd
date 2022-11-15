@@ -91,7 +91,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="ConfigurationUtils">
-    <Position X="21" Y="14.25" Width="3.25" />
+    <Position X="22" Y="14.25" Width="3.25" />
     <TypeIdentifier>
       <HashCode>AAAAABAQAADAIQAAAEAAAAAAAAAAAAAQAAAQAAAAAAA=</HashCode>
       <FileName>Assets\Scripts\Configuration\ConfigurationUtils.cs</FileName>
@@ -101,18 +101,21 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="ConfigurationData">
-    <Position X="20.25" Y="8" Width="4.5" />
+    <Position X="21.75" Y="8" Width="4.5" />
     <TypeIdentifier>
       <HashCode>EBAQABASAABAIAAAQGIAAABQABAAAAAQAAAAAAAAAAA=</HashCode>
       <FileName>Assets\Scripts\Configuration\ConfigurationData.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="HUD">
-    <Position X="15.5" Y="8" Width="4" />
+    <Position X="16.75" Y="8.25" Width="4.5" />
     <TypeIdentifier>
-      <HashCode>IAAEAAAAACASAAEAAAAYAgAAAAAAAAAAAAIAAAACAAA=</HashCode>
+      <HashCode>IAAEAAAAACASACAAAAAYAgAAAAAAAAAAAAIAAAACAAA=</HashCode>
       <FileName>Assets\Scripts\Gameplay\HUD.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="playerWonEvent" />
+    </ShowAsAssociation>
   </Class>
   <Class Name="PickupBall">
     <Position X="3.75" Y="14" Width="2.25" />
@@ -147,13 +150,14 @@
   <Class Name="EventManager">
     <Position X="9" Y="10" Width="5.5" />
     <TypeIdentifier>
-      <HashCode>AQAgABEAAAAFEAASAAAAAAQAQAAAACAAACIAAAAAAAA=</HashCode>
+      <HashCode>AQAgABEAAAAVEAASAAAAAAQAQAAAAiAAACMAAQAAAAA=</HashCode>
       <FileName>Assets\Scripts\Events\EventManager.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
       <Field Name="ballLostInvokers" />
       <Field Name="ballDiedInvokers" />
       <Field Name="hitsAddedInvokers" />
+      <Field Name="playerWonInvokers" />
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="HitsAddedEvent">
@@ -182,6 +186,13 @@
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Assets\Scripts\Events\TimerFinishedEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PlayerWonEvent">
+    <Position X="16.75" Y="12.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Events\PlayerWonEvent.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Enum Name="PickupEffect">
