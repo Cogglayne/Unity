@@ -9,26 +9,32 @@ using UnityEngine.Events;
 /// </summary>
 public class HUD : MonoBehaviour
 {
+    // text fields
     [SerializeField]
     TMP_Text leftScore;
     [SerializeField]
     TMP_Text rightScore;
     [SerializeField]
     TMP_Text score;
+    // scores and hist
     float leftCount = 0;
     float leftScoreCount = 0;
     float rightCount = 0;
     float rightScoreCount = 0;
+    // events
     PlayerWonEvent playerWonEvent = new PlayerWonEvent();
     /// <summary>
     /// Start is called before the first frame update
     /// </summary>
     void Start()
     {
+        // reset scores and hits
         leftScoreCount = 0;
         rightScoreCount = 0;    
         rightCount = 0;
         leftCount = 0;
+        
+        // event management
         EventManager.AddBallLostListener(AddPoints);
         EventManager.AddHitsAddedListener(AddHits);
         EventManager.AddPlayerWonInvoker(this);

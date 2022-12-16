@@ -19,6 +19,7 @@ public class PauseMenu : MonoBehaviour
     /// <exception cref="System.NotImplementedException"></exception>
     public void QuitGame()
     {
+        AudioManager.Play(AudioClipName.Click);
         Time.timeScale = 1;
         Destroy(gameObject);
         MenuManager.GoToMenu(Menu.MainMenu);
@@ -29,6 +30,7 @@ public class PauseMenu : MonoBehaviour
     /// <exception cref="System.NotImplementedException"></exception>
     public void ResumeGame()
     {
+        AudioManager.Play(AudioClipName.Click);
         Time.timeScale = 1;
         Destroy(gameObject);
     }

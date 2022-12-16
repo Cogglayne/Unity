@@ -15,7 +15,14 @@ public static class EventManager
     static List<UnityAction<ScreenSide, float>> hitsAddedListeners = new List<UnityAction<ScreenSide, float>>();
     static List<HUD> playerWonInvokers = new List<HUD>();
     static List<UnityAction<ScreenSide>> playerWonListeners = new List<UnityAction<ScreenSide>>();
-
+    static List<PickupBall> freezerEffectActivatedInvokers = new List<PickupBall>();
+    static List<UnityAction<ScreenSide, float>> freezerEffectActivatedListeners = new List<UnityAction<ScreenSide, float>>();
+    static List<PickupBall> speedupEffectActivatedInvokers = new List<PickupBall>();
+    static List<UnityAction<float, float>> speedupEffectActivatedListeners = new List<UnityAction<float, float>>();
+    static List<DifficultyMenu> gameStartedInvokers = new List<DifficultyMenu>();
+    static List<UnityAction<Difficulty>> gameStartedListeners = new List<UnityAction<Difficulty>>();
+    static List<MainMenu> selectGameplayTypeInvokers = new List<MainMenu>();
+    static List<UnityAction<GameType>> selectGameplayTypeListeners = new List<UnityAction<GameType>>();
     /// <summary>
     /// Adds a ball lost invoker
     /// </summary>
@@ -124,6 +131,123 @@ public static class EventManager
         foreach (HUD hud in playerWonInvokers)
         {
             hud.AddPlayerWonListener(listener);
+        }
+    }
+    /// <summary>
+    /// Adds a freezer effect activated invoker
+    /// </summary>
+    /// <param name="invoker"></param>
+    public static void AddFreezerEffectActivatedInvoker(PickupBall invoker)
+    {
+        freezerEffectActivatedInvokers.Add(invoker);
+        foreach (UnityAction<ScreenSide, float> listener in freezerEffectActivatedListeners)
+        {
+            invoker.AddFreezerEffectActivatedListener(listener);
+        }
+    }
+    /// <summary>
+    /// Adds a freezer effect activated listener
+    /// </summary>
+    /// <param name="handler"></param>
+    public static void AddFreezerEffectActivatedListener(UnityAction<ScreenSide, float> listener)
+    {
+        freezerEffectActivatedListeners.Add(listener);
+        foreach (PickupBall pickupBall in freezerEffectActivatedInvokers)
+        {
+            pickupBall.AddFreezerEffectActivatedListener(listener);
+        }
+    }
+    /// <summary>
+    /// removes a freezer invoker
+    /// </summary>
+    public static void RemoveFreezerEffectActivatedInvoker(PickupBall invoker)
+    {
+        freezerEffectActivatedInvokers.Remove(invoker);
+    }
+    /// <summary>
+    /// Adds a speedup effect activated invoker
+    /// </summary>
+    /// <param name="invoker"></param>
+    public static void AddSpeedupEffectActivatedInvoker(PickupBall invoker)
+    {
+        freezerEffectActivatedInvokers.Add(invoker);
+        foreach (UnityAction<float, float> listener in speedupEffectActivatedListeners)
+        {
+            invoker.AddSpeedupEffectActivatedListener(listener);
+        }
+    }
+    /// <summary>
+    /// Adds a speedup effect activated listener
+    /// </summary>
+    /// <param name="handler"></param>
+    public static void AddSpeedupEffectActivatedListener(UnityAction<float, float> listener)
+    {
+        speedupEffectActivatedListeners.Add(listener);
+        foreach (PickupBall pickupBall in freezerEffectActivatedInvokers)
+        {
+            pickupBall.AddSpeedupEffectActivatedListener(listener);
+        }
+    }
+    /// <summary>
+    /// removes a speedup invoker
+    /// </summary>
+    public static void RemoveSpeedUpEffectActivatedInvoker(PickupBall invoker)
+    {
+        speedupEffectActivatedInvokers.Remove(invoker);
+    }
+    /// <summary>
+    /// removes a speedup listener
+    /// </summary>
+    public static void RemoveSpeedUpEffectActivatedListener(UnityAction<float, float> listener)
+    {
+        speedupEffectActivatedListeners.Remove(listener);
+    }
+    /// <summary>
+    /// Adds a game started invoker
+    /// </summary>
+    /// <param name="invoker"></param>
+    public static void AddGameStartedInvoker(DifficultyMenu invoker)
+    {
+        gameStartedInvokers.Add(invoker);
+        foreach (UnityAction<Difficulty> listener in gameStartedListeners)
+        {
+            invoker.AddGameStartedListener(listener);
+        }
+    }
+    /// <summary>
+    /// Adds a game started listener
+    /// </summary>
+    /// <param name="handler"></param>
+    public static void AddGameStartedListener(UnityAction<Difficulty> listener)
+    {
+        gameStartedListeners.Add(listener);
+        foreach (DifficultyMenu difficultyMenu in gameStartedInvokers)
+        {
+            difficultyMenu.AddGameStartedListener(listener);
+        }
+    }
+    /// <summary>
+    /// Adds a select gameplay type invoker
+    /// </summary>
+    /// <param name="invoker"></param>
+    public static void AddSelectGameplayTypeInvoker(MainMenu invoker)
+    {
+        selectGameplayTypeInvokers.Add(invoker);
+        foreach (UnityAction<GameType> listener in selectGameplayTypeListeners)
+        {
+            invoker.AddSelectGameplayTypeListener(listener);
+        }
+    }
+    /// <summary>
+    /// Adds a select gameplay type listener
+    /// </summary>
+    /// <param name="handler"></param>
+    public static void AddSelectGameplayTypeListener(UnityAction<GameType> listener)
+    {
+        selectGameplayTypeListeners.Add(listener);
+        foreach (MainMenu mainMenu in selectGameplayTypeInvokers)
+        {
+            mainMenu.AddSelectGameplayTypeListener(listener);
         }
     }
 }

@@ -13,6 +13,7 @@ public class HelpMenu : MonoBehaviour
     /// <exception cref="System.NotImplementedException"></exception>
     public void ShowMainMenu()
     {
+        AudioManager.Play(AudioClipName.Click);
         MenuManager.GoToMenu(Menu.MainMenu);
     }
 }

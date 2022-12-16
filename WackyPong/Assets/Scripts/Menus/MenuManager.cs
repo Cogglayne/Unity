@@ -17,6 +17,7 @@ public class MenuManager : MonoBehaviour
         switch (name)
         {
             case Menu.DifficultyMenu:
+                SceneManager.LoadScene("difficulty");
                 break;
             case Menu.PauseMenu:
                 Object.Instantiate(Resources.Load("PauseMenu"));

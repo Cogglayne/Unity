@@ -1,2 +1,23 @@
-﻿PaddleMoveUnitsPerSecond,BallImpulseForce,StandardBallHits,BonusBallHits,BallLifetime,MinSpawn,MaxSpawn
-10,5,1,2,15,5,10
+﻿PaddleMoveUnitsPerSecond,10
+BallImpulseForce,5
+StandardBallValue,1
+BonusBallValue,2
+BallLifetime,15
+MinSpawn,5
+MaxSpawn,10
+StandardBallSpawnRate,60
+BonusBallSpawnRate,20
+FreezerBallPickupSpawnRate,10
+SpeedupBallPickupSpawnRate,10
+FreezerEffectDuration,2
+SpeedupEffectDuration,2
+SpeedupEffectFactor ,2
+EasyBallImpulseForce,5
+MediumBallImpulseForce,7
+HardBallImpulseForce,9
+EasyMinSpawn,6
+EasyMaxSpawn,10
+MediumMinSpawn,4
+MediumMaxSpawn,8
+HardMinSpawn,2
+HardMaxSpawn,6

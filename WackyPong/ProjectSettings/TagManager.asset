@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Ball
   - HUD
+  - PickupBall
+  - LeftPaddle
+  - RightPaddle
   layers:
   - Default
   - TransparentFX

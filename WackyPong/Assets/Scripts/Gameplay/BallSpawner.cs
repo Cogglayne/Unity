@@ -8,8 +8,16 @@ using UnityEngine;
 /// </summary>
 public class BallSpawner : MonoBehaviour
 {
+    // ball prefabs
     [SerializeField]
-    GameObject prefabBall;
+    GameObject prefabStandardBall;
+    [SerializeField]
+    GameObject prefabBonusBall;
+    [SerializeField]
+    GameObject prefabSpeedupBallPickup;
+    [SerializeField]
+    GameObject prefabFreezerBallPickup;
+    // ball spawning
     Timer ballSpawnTimer;
     bool retrySpawn = false;
     Vector2 spawnLocationMin;
@@ -20,7 +28,7 @@ public class BallSpawner : MonoBehaviour
     void Start()
     {
         // Saving lower left and upper right corners
-        GameObject tempBall = Instantiate<GameObject>(prefabBall);
+        GameObject tempBall = Instantiate<GameObject>(prefabStandardBall);
         BoxCollider2D collider = tempBall.GetComponent<BoxCollider2D>();
         float ballColliderHalfWidth = collider.size.x / 2;
         float ballColliderHalfHeight = collider.size.y / 2;
@@ -32,11 +40,13 @@ public class BallSpawner : MonoBehaviour
         tempBall.transform.position.y + ballColliderHalfHeight);
         Destroy(tempBall);
 
+        // spawn timer 
         ballSpawnTimer = gameObject.AddComponent<Timer>();
         ballSpawnTimer.AddTimerFinishedListener(HandleSpawnTimerFinished);
         ballSpawnTimer.Duration = Random.Range(ConfigurationUtils.MinSpawn, ConfigurationUtils.MaxSpawn);
         ballSpawnTimer.Run();
 
+        // event management
         EventManager.AddBallDiedListener(SpawnBall);
         EventManager.AddBallLostListener(SpawnBall);
     }
@@ -59,7 +69,25 @@ public class BallSpawner : MonoBehaviour
         if (Physics2D.OverlapArea(spawnLocationMin, spawnLocationMax) == null)
         {
             retrySpawn = false;
-            Instantiate(prefabBall, Vector3.zero, Quaternion.identity);
+            // spawns one of the four balls types depending on their probability
+            float spawnDecider = Random.Range(0, 100);
+            if (spawnDecider <= ConfigurationUtils.StandardBallSpawnRate)
+            {
+                 Instantiate(prefabStandardBall, Vector3.zero, Quaternion.identity);
+            }
+            else if (spawnDecider > ConfigurationUtils.StandardBallSpawnRate && spawnDecider <= (ConfigurationUtils.StandardBallSpawnRate + ConfigurationUtils.BonusBallSpawnRate))
+            {
+                Instantiate(prefabBonusBall, Vector3.zero, Quaternion.identity);
+            }
+            else if (spawnDecider > (ConfigurationUtils.StandardBallSpawnRate + ConfigurationUtils.BonusBallSpawnRate) && spawnDecider <= (ConfigurationUtils.StandardBallSpawnRate + ConfigurationUtils.BonusBallSpawnRate + ConfigurationUtils.FreezerBallPickupSpawnRate))
+            {
+                Instantiate(prefabFreezerBallPickup, Vector3.zero, Quaternion.identity);
+            }
+            else if (spawnDecider > (ConfigurationUtils.StandardBallSpawnRate + ConfigurationUtils.BonusBallSpawnRate + ConfigurationUtils.FreezerBallPickupSpawnRate) && spawnDecider <= 100)
+            {
+                Instantiate(prefabSpeedupBallPickup, Vector3.zero, Quaternion.identity);
+            }
+            AudioManager.Play(AudioClipName.Spawn);
         }
         else
         {

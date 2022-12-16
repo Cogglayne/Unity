@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
@@ -7,53 +8,62 @@ using UnityEngine.Events;
 /// <summary>
 /// A paddle
 /// </summary>
-public class Paddle : MonoBehaviour
+public abstract class Paddle : MonoBehaviour
 {
-	Rigidbody2D paddleBody;
-	[SerializeField]
-	ScreenSide ss;
-	Vector2 paddleVector;
+	// components
+	protected Rigidbody2D paddleBody;
+    protected Vector2 paddleVector;
+	// Screenside
+	protected ScreenSide ss;
+	// floats
 	float halfColliderHeight;
 	const float BounceAngleHalfRange = 60 * Mathf.Deg2Rad;
+	// events
 	HitsAddedEvent hitsAddedEvent = new HitsAddedEvent();
+	// timers
+	Timer freezeTimer;
+	// bools
+	bool isFrozen;
     /// <summary>
     /// Start is called before the first frame update
     /// </summary>
-    void Start()
+    public virtual void Start()
 	{
+		if(tag == "LeftPaddle")
+		{
+			ss = ScreenSide.Left;
+		}else if (tag == "RightPaddle")
+		{
+			ss = ScreenSide.Right;
+		}
+		// gets the components
 		paddleBody = GetComponent<Rigidbody2D>();
 		halfColliderHeight = GetComponent<BoxCollider2D>().size.y / 2;
+
+		// event management
 		EventManager.AddHitsAddedInvoker(this);
+		EventManager.AddFreezerEffectActivatedListener(Freeze);
+
+		// freze timer
+		freezeTimer = gameObject.AddComponent<Timer>();
+		freezeTimer.AddTimerFinishedListener(UnFreeze);
     }
 	/// <summary>
 	/// Controls the movement for the right and left paddle
 	/// </summary>
 	void FixedUpdate()
 	{
-        // paddle movement keys depend on which side of the screen the paddle is at
-        float leftAxisInput = Input.GetAxis("LeftPaddle");
-		if (leftAxisInput != 0 && ss == ScreenSide.Left)
-		{
-            paddleVector = paddleBody.position;
-            paddleVector.y += leftAxisInput * ConfigurationUtils.PaddleMoveUnitsPerSecond * Time.deltaTime;
-            paddleVector.y = CalculateClampedY(paddleVector.y);
-            paddleBody.MovePosition(paddleVector);
+        if (!isFrozen)
+        {
+			UpdatePaddle();
         }
-		float rightAxisInput = Input.GetAxis("RightPaddle");
-		if (rightAxisInput != 0 && ss == ScreenSide.Right)
-		{
-            paddleVector = paddleBody.position;
-            paddleVector.y += rightAxisInput * ConfigurationUtils.PaddleMoveUnitsPerSecond * Time.deltaTime;
-            paddleVector.y = CalculateClampedY(paddleVector.y);
-            paddleBody.MovePosition(paddleVector);
-        }
-	}
+    }
     /// <summary>
     /// Keeps the paddles inside the screen
     /// </summary>
     /// <param name="y"></param>
     /// <returns></returns>
-    float CalculateClampedY(float y)
+    protected float CalculateClampedY(float y)
     {
         // checks if half the paddles collider is out of the screen 
         // returns a new y if the original y was outside the screen, returns the original y otherwise
@@ -88,7 +98,8 @@ public class Paddle : MonoBehaviour
 	{
 		if (coll.gameObject.CompareTag("Ball") && CheckFront(coll))
 		{
-			hitsAddedEvent.Invoke(this.ss, coll.gameObject.GetComponent<Ball>().Hits);
+			AudioManager.Play(AudioClipName.Hit);
+			hitsAddedEvent.Invoke(this.ss, coll.gameObject.GetComponent<Ball>().Value);
 			// calculate new ball direction
 			float ballOffsetFromPaddleCenter =
 				coll.transform.position.y - transform.position.y;
@@ -117,9 +128,32 @@ public class Paddle : MonoBehaviour
 	/// Freezes opponents paddle
 	/// </summary>
 	/// <exception cref="System.NotImplementedException"></exception>
-	public void Freeze(float duration)
+	public void Freeze(ScreenSide side, float duration)
 	{
-		throw new System.NotImplementedException();
+        if (ss == side)
+        {
+            isFrozen = true;
+            if (!freezeTimer.Running)
+            {
+                AudioManager.Play(AudioClipName.Freezer);
+                freezeTimer.Duration = duration;
+                freezeTimer.Run();
+            }
+            else
+            {
+                freezeTimer.AddTime(duration);
+            }
+        }
+
+	}
+	/// <summary>
+	/// Unfreeze the paddle
+	/// </summary>
+	void UnFreeze()
+	{
+        AudioManager.Play(AudioClipName.FreezerDeactivated);
+        isFrozen = false;
+		freezeTimer.Stop();
 	}
     /// <summary>
     /// adds a listener
@@ -128,4 +162,12 @@ public class Paddle : MonoBehaviour
     {
         hitsAddedEvent.AddListener(listener);
     }
+	/// <summary>
+	/// moves paddle location if needed
+	/// </summary>
+	protected abstract void UpdatePaddle();
+	/// <summary>
+	/// called in update paddle to move the paddle
+	/// </summary>
+	protected abstract void PaddleMove(float input);
 }

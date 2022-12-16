@@ -13,6 +13,14 @@ public class GameplayManager : MonoBehaviour
 	/// </summary>
 	void Start()
 	{
+        if(GameTypeUtils.GameType == GameType.SinglePlayer)
+        {
+            GameObject.FindWithTag("RightPaddle").AddComponent<ComputerPaddle>();
+        }
+        else if (GameTypeUtils.GameType == GameType.TwoPlayer)
+        {
+            GameObject.FindWithTag("RightPaddle").AddComponent<HumanPaddle>();
+        }
         EventManager.AddPlayerWonListener(EndGame);
 	}
 	

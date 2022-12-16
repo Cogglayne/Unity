@@ -24,7 +24,13 @@ public class Timer : MonoBehaviour
 	#endregion
 	
 	#region Properties
-	
+	/// <summary>
+	///  Returns how much time is left on the timer
+	/// </summary>
+	public float RemainingTime
+	{
+		get { return (totalSeconds - elapsedSeconds); }
+	}
 	/// <summary>
 	/// Sets the duration of the timer
 	/// The duration can only be set if the timer isn't currently running
@@ -100,12 +106,27 @@ public class Timer : MonoBehaviour
 	}
 	
 	/// <summary>
-	/// adds a listener
+	/// adds a timer finished listener
 	/// </summary>
 	/// <param name="listener"></param>
 	public void AddTimerFinishedListener(UnityAction listener)
 	{
 		timerFinishedEvent.AddListener(listener);
 	}
+	/// <summary>
+	/// adds time to the timer's duration
+	/// </summary>
+	public void AddTime(float seconds)
+	{
+		totalSeconds += seconds;
+	}
+	/// <summary>
+	/// Stops the timer
+	/// </summary>
+	public void Stop()
+	{
+		started = false;
+		running = false;
+    }
 	#endregion
 }

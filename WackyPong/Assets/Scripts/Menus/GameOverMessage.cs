@@ -14,6 +14,7 @@ public class GameOverMessage : MonoBehaviour
     /// </summary>
     void Start()
     {
+        AudioManager.Play(AudioClipName.LoseGame);
         // freezes the game
         Time.timeScale = 0;
     }
@@ -37,6 +38,7 @@ public class GameOverMessage : MonoBehaviour
     /// </summary>
     public void QuitGame()
     {
+        AudioManager.Play(AudioClipName.Click);
         Time.timeScale = 1;
         Destroy(gameObject);
         MenuManager.GoToMenu(Menu.MainMenu);
